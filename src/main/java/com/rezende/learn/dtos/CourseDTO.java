@@ -9,13 +9,17 @@ public class CourseDTO {
     private String name;
     private String synopsis;
     private String thumbnailUrl;
+    private Boolean featured;
+    private CategoryDTO category;
 
     public CourseDTO() {}
 
-    public CourseDTO(String name, String synopsis, String thumbnailUrl, Boolean featured, Category category) {
+    public CourseDTO(String name, String synopsis, String thumbnailUrl, Boolean featured, CategoryDTO category) {
         this.name = name;
         this.synopsis = synopsis;
         this.thumbnailUrl = thumbnailUrl;
+        this.featured = featured;
+        this.category = category;
     }
 
     public CourseDTO(Course entity) {
@@ -23,6 +27,8 @@ public class CourseDTO {
         setName(entity.getName());
         setSynopsis(entity.getSynopsis());
         setThumbnailUrl(entity.getThumbnailUrl());
+        setFeatured(entity.getFeatured());
+        setCategory(new CategoryDTO(entity.getCategory()));
     }
 
     public Long getId() {
@@ -47,6 +53,22 @@ public class CourseDTO {
 
     public void setSynopsis(String synopsis) {
         this.synopsis = synopsis;
+    }
+
+    public Boolean getFeatured() {
+        return featured;
+    }
+
+    public void setFeatured(Boolean featured) {
+        this.featured = featured;
+    }
+
+    public CategoryDTO getCategory() {
+        return category;
+    }
+
+    public void setCategory(CategoryDTO category) {
+        this.category = category;
     }
 
     public String getThumbnailUrl() {

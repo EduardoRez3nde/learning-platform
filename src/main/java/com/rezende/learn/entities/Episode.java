@@ -44,6 +44,8 @@ public class Episode {
     @OneToMany(mappedBy = "id.episode", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<WatchTime> watchTimes = new HashSet<>();
 
+    public Episode() {}
+
     public Episode(Long id, String name, String synopsis, Integer order, String videoUrl, Long secondsLong, Course course) {
         this.id = id;
         this.name = name;

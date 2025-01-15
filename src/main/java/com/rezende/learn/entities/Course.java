@@ -41,6 +41,7 @@ public class Course {
     private Category category;
 
     @OneToMany(mappedBy = "course")
+    @OrderBy("episode_order ASC")
     private final List<Episode> episodes = new ArrayList<>();
 
     @OneToMany(mappedBy = "id.course")
