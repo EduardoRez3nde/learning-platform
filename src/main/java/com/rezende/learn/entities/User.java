@@ -1,7 +1,10 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +22,12 @@ public class User {
     private String phone;
     private Date birthDate;
     private String email;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "id.user")
     private final Set<Like> likes = new HashSet<>();

@@ -2,7 +2,6 @@ package com.rezende.learn.services;
 
 import com.rezende.learn.dtos.CategoryCourseDTO;
 import com.rezende.learn.dtos.CategoryDTO;
-import com.rezende.learn.dtos.CategoryPostDTO;
 import com.rezende.learn.entities.Category;
 import com.rezende.learn.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;

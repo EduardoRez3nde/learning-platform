@@ -3,6 +3,10 @@ package com.rezende.learn.entities;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_favorite")
@@ -10,6 +14,12 @@ public class Favorite {
 
     @EmbeddedId
     private FavoritePK id = new FavoritePK();
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private LocalDateTime updatedAt;
 
     public Favorite() {}
 

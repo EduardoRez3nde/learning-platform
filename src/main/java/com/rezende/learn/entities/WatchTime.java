@@ -4,6 +4,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "tb_watch_time")
@@ -11,6 +15,12 @@ public class WatchTime {
 
     @EmbeddedId
     private WatchTimePK id = new WatchTimePK();
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private Long seconds;

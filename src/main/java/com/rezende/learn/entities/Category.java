@@ -1,7 +1,10 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +21,12 @@ public class Category {
 
     @Column(nullable = false)
     private Integer position;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "category")
     private final List<Course> courses = new ArrayList<>();

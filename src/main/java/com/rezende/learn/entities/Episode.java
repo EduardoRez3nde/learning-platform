@@ -1,7 +1,10 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,6 +30,12 @@ public class Episode {
 
     @Column(nullable = false)
     private Long secondsLong;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedBy
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "course_id", nullable = false)
