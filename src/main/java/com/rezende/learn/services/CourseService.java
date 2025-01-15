@@ -11,8 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -33,6 +38,13 @@ public class CourseService {
     public Page<CourseDTO> findAll(Pageable pageable) {
         Page<Course> result = courseRepository.findAll(pageable);
         return result.map(CourseDTO::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CourseDTO> findRandomFeaturedCourses() {
+        List<Course> courses = courseRepository.findFeaturedCourses();
+        Collections.shuffle(courses);
+        return courses.stream().map(CourseDTO::new).limit(3).toList();
     }
 
     @Transactional

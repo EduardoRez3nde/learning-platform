@@ -1,6 +1,5 @@
 package com.rezende.learn.controllers;
 
-import com.rezende.learn.dtos.CategoryDTO;
 import com.rezende.learn.dtos.CourseDTO;
 import com.rezende.learn.dtos.CourseWithEpisodesDTO;
 import com.rezende.learn.services.CourseService;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/courses")
@@ -29,6 +29,12 @@ public class CourseController {
     @GetMapping
     public ResponseEntity<Page<CourseDTO>> findAll(Pageable pageable) {
         Page<CourseDTO> result = courseService.findAll(pageable);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(value = "/featured")
+    public ResponseEntity<List<CourseDTO>> findRandomFeaturedCourses() {
+        List<CourseDTO> result = courseService.findRandomFeaturedCourses();
         return ResponseEntity.ok(result);
     }
 
