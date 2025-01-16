@@ -1,6 +1,5 @@
 package com.rezende.learn.services;
 
-import com.rezende.learn.dtos.CategoryDTO;
 import com.rezende.learn.dtos.CourseDTO;
 import com.rezende.learn.dtos.CourseWithEpisodesDTO;
 import com.rezende.learn.entities.Category;
@@ -11,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -41,10 +38,28 @@ public class CourseService {
     }
 
     @Transactional(readOnly = true)
+    public Page<CourseDTO> findByName(String name, Pageable pageable) {
+        Page<Course> courses = courseRepository.findByName(name, pageable);
+        return courses.map(course -> new CourseDTO(course));
+    }
+
+    @Transactional(readOnly = true)
     public List<CourseDTO> findRandomFeaturedCourses() {
         List<Course> courses = courseRepository.findFeaturedCourses();
         Collections.shuffle(courses);
         return courses.stream().map(CourseDTO::new).limit(3).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CourseDTO> findNewestCourse() {
+        List<Course> courses = courseRepository.findRecentCourses();
+        return courses.stream().map(course -> new CourseDTO(course)).limit(10).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CourseDTO> findTopByLikes() {
+        List<Course> courses = courseRepository.findTopByLikes();
+        return courses.stream().map(course -> new CourseDTO(course)).toList();
     }
 
     @Transactional

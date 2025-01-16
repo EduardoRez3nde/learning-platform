@@ -27,14 +27,31 @@ public class CourseController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<CourseDTO>> findAll(Pageable pageable) {
-        Page<CourseDTO> result = courseService.findAll(pageable);
+    public ResponseEntity<Page<CourseDTO>> findAll(@RequestParam(value = "name", required = false)
+       String name, Pageable pageable) {
+        Page<CourseDTO> result;
+        if (name != null && !name.isEmpty())
+            result = courseService.findByName(name, pageable);
+        else
+            result = courseService.findAll(pageable);
         return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/featured")
     public ResponseEntity<List<CourseDTO>> findRandomFeaturedCourses() {
         List<CourseDTO> result = courseService.findRandomFeaturedCourses();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(value = "/recent")
+    public ResponseEntity<List<CourseDTO>> findNewestCourses() {
+        List<CourseDTO> result = courseService.findNewestCourse();
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping(value = "/tops")
+    public ResponseEntity<List<CourseDTO>> findTopByCourses() {
+        List<CourseDTO> result = courseService.findTopByLikes();
         return ResponseEntity.ok(result);
     }
 

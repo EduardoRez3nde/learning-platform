@@ -10,17 +10,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tb_users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String firstname;
+
+    @Column(nullable = false)
     private String lastname;
+
+    @Column(nullable = false)
     private String phone;
+
+    @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIMEZONE")
     private Date birthDate;
+
+    @Column(nullable = false)
     private String email;
 
     @CreatedDate
