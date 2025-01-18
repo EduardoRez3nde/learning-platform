@@ -3,6 +3,7 @@ package com.rezende.learn.controllers;
 import com.rezende.learn.dtos.CourseDTO;
 import com.rezende.learn.dtos.CourseWithEpisodesDTO;
 import com.rezende.learn.services.CourseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,7 +57,7 @@ public class CourseController {
     }
 
     @PostMapping
-    public ResponseEntity<CourseDTO> insert(@RequestBody CourseDTO dto) {
+    public ResponseEntity<CourseDTO> insert(@Valid @RequestBody CourseDTO dto) {
         dto = courseService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
@@ -64,7 +65,7 @@ public class CourseController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CourseDTO> update(@PathVariable Long id, @RequestBody CourseDTO dto) {
+    public ResponseEntity<CourseDTO> update(@Valid @PathVariable Long id, @RequestBody CourseDTO dto) {
         CourseDTO result = courseService.update(id, dto);
         return ResponseEntity.ok(result);
     }

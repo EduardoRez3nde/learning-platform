@@ -6,6 +6,9 @@ import com.rezende.learn.entities.Category;
 import com.rezende.learn.entities.Course;
 import com.rezende.learn.repositories.CategoryRepository;
 import com.rezende.learn.repositories.CourseRepository;
+import com.rezende.learn.services.exceptions.DatabaseException;
+import com.rezende.learn.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class CourseService {
@@ -27,8 +31,13 @@ public class CourseService {
 
     @Transactional(readOnly = true)
     public CourseWithEpisodesDTO findById(Long id) {
-        Course result = courseRepository.findById(id).orElseThrow();
-        return new CourseWithEpisodesDTO(result);
+        try {
+            Course result = courseRepository.findById(id).orElseThrow();
+            return new CourseWithEpisodesDTO(result);
+        }
+        catch(NoSuchElementException e) {
+            throw new ResourceNotFoundException("Resource Not Found");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -79,29 +88,34 @@ public class CourseService {
 
     @Transactional
     public CourseDTO update(Long id, CourseDTO dto) {
-        Course course = courseRepository.getReferenceById(id);
-        course.setName(dto.getName());
-        course.setFeatured(dto.getFeatured());
-        course.setSynopsis(dto.getSynopsis());
-        course.setThumbnailUrl(dto.getThumbnailUrl());
+        try {
+            Course course = courseRepository.getReferenceById(id);
+            course.setName(dto.getName());
+            course.setFeatured(dto.getFeatured());
+            course.setSynopsis(dto.getSynopsis());
+            course.setThumbnailUrl(dto.getThumbnailUrl());
 
-        Category category = categoryRepository.getReferenceById(dto.getCategory().getId());
-        course.setCategory(category);
+            Category category = categoryRepository.getReferenceById(dto.getCategory().getId());
+            course.setCategory(category);
 
-        course = courseRepository.save(course);
-        return new CourseDTO(course);
+            course = courseRepository.save(course);
+            return new CourseDTO(course);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Resource with id %d not found", id);
+        }
     }
 
     @Transactional
     public void deleteById(Long id) {
 
         if (!courseRepository.existsById(id))
-            throw new RuntimeException("Resource not Found");
+            throw new ResourceNotFoundException("Resource with id %d not Found", id);
         try {
             courseRepository.deleteById(id);
         }
         catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Integrity Violation Exception");
+            throw new DatabaseException("Integrity Violation Exception");
         }
     }
 }

@@ -4,12 +4,17 @@ import com.rezende.learn.dtos.CategoryCourseDTO;
 import com.rezende.learn.dtos.CategoryDTO;
 import com.rezende.learn.entities.Category;
 import com.rezende.learn.repositories.CategoryRepository;
+import com.rezende.learn.services.exceptions.DatabaseException;
+import com.rezende.learn.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 @Service
 public class CategoryService {
@@ -19,8 +24,13 @@ public class CategoryService {
 
     @Transactional(readOnly = true)
     public CategoryCourseDTO finById(Long id) {
-        Category result = categoryRepository.getReferenceById(id);
-        return new CategoryCourseDTO(result);
+        try {
+            Category result = categoryRepository.getReferenceById(id);
+            return new CategoryCourseDTO(result);
+        }
+        catch(NoSuchElementException e) {
+            throw new ResourceNotFoundException("Resource Not Found");
+        }
     }
 
     @Transactional(readOnly = true)
@@ -39,22 +49,27 @@ public class CategoryService {
 
     @Transactional
     public CategoryDTO update(Long id, CategoryDTO dto) {
-        Category category = categoryRepository.getReferenceById(id);
-        copyToEntity(category, dto);
-        category = categoryRepository.save(category);
-        return new CategoryDTO(category);
+        try {
+            Category category = categoryRepository.getReferenceById(id);
+            copyToEntity(category, dto);
+            category = categoryRepository.save(category);
+            return new CategoryDTO(category);
+        }
+        catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Resource with id %d not found", id);
+        }
     }
 
     @Transactional
     public void deleteById(Long id) {
 
         if (!categoryRepository.existsById(id))
-            throw new RuntimeException("Resource not Found");
+            throw new ResourceNotFoundException("Resource with id %d not Found", id);
         try {
             categoryRepository.deleteById(id);
         }
         catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Integrity Violation Exception");
+            throw new DatabaseException("Integrity Violation Exception");
         }
     }
 

@@ -1,6 +1,8 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -19,16 +21,20 @@ public class Course {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "The name field cannot be blank. Please fill in this field.")
+    @Size(min = 2, max = 50, message = "The name must be between {min} and {max} characters long.")
     private String name;
 
     @Column(nullable = false)
+    @NotBlank(message = "The synopsis field cannot be blank. Please fill in this field.")
+    @Size(min = 1, max = 100, message = "The name must be between {min} and {max} characters long.")
     private String synopsis;
 
     @Column(nullable = false)
     private String thumbnailUrl;
 
     @Column(nullable = false)
-    private Boolean featured;
+    private Boolean featured = false;
 
     @CreatedDate
     private LocalDateTime createdAt;

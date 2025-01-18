@@ -1,6 +1,9 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
@@ -17,9 +20,13 @@ public class Category {
     private Long id;
 
     @Column(nullable = false)
+    @NotBlank(message = "The email field cannot be blank. Please fill in this field.")
+    @Size(min = 2, max = 50, message = "The name must be between {min} and {max} characters long.")
     private String name;
 
     @Column(nullable = false)
+    @NotBlank(message = "The position field cannot be blank. Please fill in this field.")
+    @Min(value = 1, message = "The quantity must be at least {value}.")
     private Integer position;
 
     @CreatedDate

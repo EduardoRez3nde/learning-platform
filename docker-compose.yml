@@ -1,0 +1,51 @@
+services:
+
+  app:
+    image: learn-app:latest
+    build:
+      context: .    # Define o Dockerfile no diretório raiz
+    container_name: learn-app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/learn
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 1234
+    ports:
+      - "8080:8080"
+    networks:
+      - learn-network
+
+  db:
+    image: postgres:17.2
+    container_name: learn-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: learn
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - learn-network
+
+  pgadmin:
+    image: dpage/pgadmin4:8.14.0
+    container_name: pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@example.com # E-mail do usuário pgAdmin
+      - PGADMIN_DEFAULT_PASSWORD=1234       # Senha do usuário pgAdmin
+    ports:
+      - "5050:80" # Porta para acessar o pgAdmin via navegador
+    depends_on:
+      - db
+    networks:
+      - learn-network
+
+networks:
+  learn-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
