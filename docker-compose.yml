@@ -4,6 +4,8 @@ services:
     image: learn-app:latest
     build:
       context: .    # Define o Dockerfile no diretório raiz
+    volumes:
+      - /home/eduardo/Documents/workspace/learn/uploads:/app/uploads
     container_name: learn-app
     depends_on:
       - db
