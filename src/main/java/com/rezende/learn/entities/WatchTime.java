@@ -23,9 +23,14 @@ public class WatchTime {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private Long seconds;
+    private Long seconds = 0L;
 
     public WatchTime() {}
+
+    public WatchTime(User user, Episode episode) {
+        id.setEpisode(episode);
+        id.setUser(user);
+    }
 
     public WatchTime(Long seconds, User user, Episode episode) {
         id.setEpisode(episode);

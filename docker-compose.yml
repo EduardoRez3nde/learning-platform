@@ -5,7 +5,9 @@ services:
     build:
       context: .    # Define o Dockerfile no diretório raiz
     volumes:
-      - /home/eduardo/Documents/workspace/learn/uploads:/app/uploads
+      - /home/eduardo/Documents/workspace/learn/uploads/videos:/app/uploads/videos
+      - /home/eduardo/Documents/workspace/learn/uploads/videos:/app/uploads/pdfs
+
     container_name: learn-app
     depends_on:
       - db

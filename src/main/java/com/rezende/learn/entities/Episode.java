@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -114,5 +115,17 @@ public class Episode {
 
     public Set<WatchTime> getWatchTimes() {
         return watchTimes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Episode episode = (Episode) o;
+        return Objects.equals(id, episode.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
     }
 }

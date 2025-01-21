@@ -4,6 +4,8 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
+import java.util.Objects;
+
 @Embeddable
 public class LikePK {
 
@@ -31,5 +33,17 @@ public class LikePK {
 
     public void setCourse(Course course) {
         this.course = course;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        LikePK likePK = (LikePK) o;
+        return Objects.equals(user, likePK.user) && Objects.equals(course, likePK.course);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user, course);
     }
 }
