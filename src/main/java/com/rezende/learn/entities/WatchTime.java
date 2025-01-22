@@ -23,7 +23,7 @@ public class WatchTime {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private Long seconds = 0L;
+    private Long seconds;
 
     public WatchTime() {}
 

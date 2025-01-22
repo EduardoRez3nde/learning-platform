@@ -52,7 +52,6 @@ public class EpisodeService {
             WatchTimePK id = new WatchTimePK(user, episode);
 
             Optional<WatchTime> result = watchTimeRepository.findById(id);
-
             WatchTime watchTime;
 
             if (result.isPresent()) {

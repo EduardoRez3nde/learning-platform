@@ -24,6 +24,10 @@ public class Favorite {
 
     public Favorite() {}
 
+    public Favorite(FavoritePK id) {
+        this.id = id;
+    }
+
     public Favorite(Course course, User user) {
         id.setUser(user);
         id.setCourse(course);
