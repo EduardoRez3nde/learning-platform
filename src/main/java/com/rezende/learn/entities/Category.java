@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,11 +31,11 @@ public class Category {
     @Min(value = 1, message = "The quantity must be at least {value}.")
     private Integer position;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
-    @LastModifiedBy
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     @OneToMany(mappedBy = "category")
     private final List<Course> courses = new ArrayList<>();
@@ -73,6 +74,16 @@ public class Category {
 
     public List<Course> getCourses() {
         return courses;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
     @Override

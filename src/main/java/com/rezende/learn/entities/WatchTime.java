@@ -1,26 +1,23 @@
 package com.rezende.learn.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
+import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(name = "tb_watch_time")
+@EntityListeners(AuditingEntityListener.class)
 public class WatchTime {
 
     @EmbeddedId
     private WatchTimePK id = new WatchTimePK();
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
-    @LastModifiedBy
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     @Column(nullable = false)
     private Long seconds;
@@ -60,5 +57,15 @@ public class WatchTime {
 
     public void setEpisode(Episode episode) {
         id.setEpisode(episode);
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 }

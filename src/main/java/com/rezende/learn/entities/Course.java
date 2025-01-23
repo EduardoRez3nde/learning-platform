@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -33,11 +34,11 @@ public class Course {
     @Column(nullable = false)
     private Boolean featured = false;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
-    @LastModifiedBy
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
@@ -122,6 +123,16 @@ public class Course {
 
     public Set<Favorite> getFavorites() {
         return favorites;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
     @Override

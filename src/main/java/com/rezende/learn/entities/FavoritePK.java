@@ -17,12 +17,12 @@ public class FavoritePK {
     @JoinColumn(name = "user_id")
     private User user;
 
+    public FavoritePK() {}
+
     public FavoritePK(Course course, User user) {
         this.course = course;
         this.user = user;
     }
-
-    public FavoritePK() {}
 
     public Course getCourse() {
         return course;

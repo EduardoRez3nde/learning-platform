@@ -3,7 +3,10 @@ package com.rezende.learn.entities;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Embeddable
@@ -18,6 +21,11 @@ public class LikePK {
     private Course course;
 
     public LikePK() {}
+
+    public LikePK(User user, Course course) {
+        this.user = user;
+        this.course = course;
+    }
 
     public User getUser() {
         return user;

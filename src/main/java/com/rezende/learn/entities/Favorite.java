@@ -1,26 +1,24 @@
 package com.rezende.learn.entities;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
+import jakarta.persistence.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Objects;
 
 @Entity
 @Table(name = "tb_favorite")
+@EntityListeners(AuditingEntityListener.class)
 public class Favorite {
 
     @EmbeddedId
     private FavoritePK id = new FavoritePK();
 
-    @CreatedDate
-    private LocalDateTime createdAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
 
-    @LastModifiedBy
-    private LocalDateTime updatedAt;
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     public Favorite() {}
 
@@ -31,6 +29,10 @@ public class Favorite {
     public Favorite(Course course, User user) {
         id.setUser(user);
         id.setCourse(course);
+    }
+
+    public FavoritePK getId() {
+        return id;
     }
 
     public void setCourse(Course course) {
@@ -47,6 +49,16 @@ public class Favorite {
 
     public User getUser() {
         return id.getUser();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
     @Override
