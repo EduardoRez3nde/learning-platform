@@ -1,6 +1,9 @@
 package com.rezende.learn.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.Date;
@@ -28,8 +31,12 @@ public class User {
     @Column(nullable = false, columnDefinition = "TIMESTAMP WITHOUT TIMEZONE")
     private Date birthDate;
 
-    @Column(nullable = false)
+    @Email(message = "Please provide a valid email address.")
     private String email;
+
+    @Column(nullable = false)
+    @NotBlank(message = "The password field cannot be blank. Please fill in this field.")
+    private String password;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant createdAt;
@@ -50,7 +57,7 @@ public class User {
     @JoinTable(
             name = "tb_user_role",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "course_id"))
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
 
     public User() {}
@@ -110,6 +117,14 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Set<Like> getLikes() {

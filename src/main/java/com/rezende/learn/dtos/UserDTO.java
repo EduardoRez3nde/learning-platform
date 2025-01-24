@@ -1,9 +1,10 @@
 package com.rezende.learn.dtos;
 
 import com.rezende.learn.entities.User;
-import jakarta.persistence.Column;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDTO {
 
@@ -13,6 +14,8 @@ public class UserDTO {
     private String phone;
     private Date birthDate;
     private String email;
+
+    private final Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO() {}
 
@@ -32,6 +35,7 @@ public class UserDTO {
         setPhone(entity.getPhone());
         setBirthDate(entity.getBirthDate());
         setEmail(entity.getEmail());
+        entity.getRoles().forEach(role -> roles.add(new RoleDTO(role)));
     }
 
 
@@ -81,5 +85,9 @@ public class UserDTO {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<RoleDTO> getRoles() {
+        return roles;
     }
 }

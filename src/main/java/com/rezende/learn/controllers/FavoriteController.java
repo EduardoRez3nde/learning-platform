@@ -4,6 +4,7 @@ import com.rezende.learn.dtos.CourseDTO;
 import com.rezende.learn.dtos.FavoriteDTO;
 import com.rezende.learn.dtos.UserAndFavoriteDTO;
 import com.rezende.learn.services.FavoriteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class FavoriteController {
     }
 
     @GetMapping(value = "/{userId}")
-    public ResponseEntity<UserAndFavoriteDTO> findByUserId(@PathVariable Long userId) {
+    public ResponseEntity<UserAndFavoriteDTO> findByUserId(@Valid @PathVariable Long userId) {
         UserAndFavoriteDTO result = favoriteService.findByUserId(userId);
         return ResponseEntity.ok(result);
     }
