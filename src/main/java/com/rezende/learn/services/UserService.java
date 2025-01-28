@@ -1,7 +1,7 @@
 package com.rezende.learn.services;
 
-import com.rezende.learn.dtos.UserRoleDTO;
 import com.rezende.learn.dtos.UserDTO;
+import com.rezende.learn.dtos.UserRoleDTO;
 import com.rezende.learn.dtos.UserWithPasswordDTO;
 import com.rezende.learn.entities.Role;
 import com.rezende.learn.entities.User;
@@ -14,10 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.NoSuchElementException;
 
@@ -31,7 +30,8 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
+
 
     @Transactional(readOnly = true)
     public UserDTO finById(Long id) {
