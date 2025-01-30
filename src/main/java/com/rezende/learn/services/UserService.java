@@ -1,8 +1,11 @@
 package com.rezende.learn.services;
 
+import com.rezende.learn.dtos.EpisodeDTO;
 import com.rezende.learn.dtos.UserDTO;
 import com.rezende.learn.dtos.UserRoleDTO;
 import com.rezende.learn.dtos.UserWithPasswordDTO;
+import com.rezende.learn.entities.Course;
+import com.rezende.learn.entities.Episode;
 import com.rezende.learn.entities.Role;
 import com.rezende.learn.entities.User;
 import com.rezende.learn.repositories.RoleRepository;
@@ -18,7 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -31,7 +35,6 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @Transactional(readOnly = true)
     public UserDTO finById(Long id) {
@@ -96,5 +99,19 @@ public class UserService {
             Role roles = roleRepository.getReferenceById(role.getId());
             entity.getRoles().add(roles);
         });
+    }
+
+    private List<Episode> filterLastEpisodeByCourse(List<Episode> episodes) {
+        if (episodes.isEmpty())
+            throw new ResourceNotFoundException("Resource not Found");
+        Map<Long, Episode> lastEpisode = episodes.stream()
+                .filter(episode -> episode.getOrder() > 0)
+                .collect(Collectors.toMap(
+            episode -> episode.getCourse().getId(),
+            episode -> episode,
+                    (episode1, episode2) -> episode1.getOrder() > episode2.getOrder() ? episode1 : episode2
+                )
+        );
+        return new ArrayList<>(lastEpisode.values());
     }
 }
